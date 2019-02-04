@@ -4,6 +4,8 @@ Download the repository. From the *src* folder open the *index.html* page in a b
 
 > A note about 'slash' characters. When using the Command prompt or terminal, most operating systems use a forward slash between filenames e.g. *node_modules/.bin/lessc*. Windows use a backslash i.e. *node_modules\.bin\lessc*. The backslash character is also the escape character so if we have a file path as part of a string we write "node_modules\\.bin\\lessc". The following instructions are written for windows. If you are using a Mac, use forward slashes instead. 
 
+> A note about local and global NPM packages. It is consider good practice to install packages locally. However, at the University, I have had some problems doing this. Therefore, the following instructions use global packages. 
+
 ## Running less as an NPM script
 In the root of this folder create a new Node.js project
 
@@ -14,7 +16,7 @@ npm init -y
 Next we will install *less* so that we can use it in our project. Enter the following:
 
 ```
-npm install less --save-dev
+npm install -g less
 
 ```
 
@@ -25,7 +27,7 @@ Check this has worked by doing the following
 3. Back in the Node.js command prompt, enter the following:
 
 ```
-node_modules\.bin\lessc src/less/style.less src/css/style.css
+lessc src/less/style.less src/css/style.css
 ```
 
 * Refresh the page in a browser to test this has worked. 
@@ -38,7 +40,7 @@ node_modules\.bin\lessc src/less/style.less src/css/style.css
   "description": "",
   "main": "index.js",
   "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css"
+    "less": "lessc src/less/style.less src/css/style.css"
   },
   "keywords": [],
   "author": "",
@@ -50,7 +52,7 @@ node_modules\.bin\lessc src/less/style.less src/css/style.css
 
 ```
   "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css"
+    "less": "lessc src/less/style.less src/css/style.css"
   },
 ```
 
@@ -77,21 +79,21 @@ Instead of switching between the command prompt and your text editor, we can add
 * First we need to install another package. In the command prompt enter the following:
 
 ```
-npm install onchange --save-dev
+npm install -g onchange
 ```
 
 The *onchange* package will watch files for us and then run a script e.g.
 
 ```
-node_modules\.bin\onchange src/less/style.less -- npm run less
+onchange src/less/style.less -- npm run less
 ```
 
 Whenever *style.less* changes we run the less script. We also want this to be a script, so modify the script section of the package.json file to include this and save your changes
 
 ```
 "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css",
-    "watch-css": "node_modules/.bin/onchange src/less/style.less -- npm run less"
+    "less": "lessc src/less/style.less src/css/style.css",
+    "watch-css": "onchange src/less/style.less -- npm run less"
   },
 ```
 
@@ -109,13 +111,13 @@ This works fine for our *.less* file, but we can improve our workflow by watchin
 
 To install browser-sync
 ```
-npm install browser-sync --save-dev
+npm install -g browser-sync
 ```
 
 Next, in the command prompt we will tell browser-sync to start a web server and watch our css file and html file. 
 
 ```
-node_modules\.bin\browser-sync start --server "src" --files "src/css/style.css, src/index.html"
+browser-sync start --server "src" --files "src/css/style.css, src/index.html"
 ```
 
 A browser should open and your *index.html* page should be displayed. 
@@ -132,8 +134,8 @@ Next let's make this into a script. Modify the package.json file to include a br
 
 ```
 "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css",
-      "watch-css": "node_modules/.bin/onchange src/less/style.less -- npm run less",
+    "less": "lessc src/less/style.less src/css/style.css",
+    "watch-css": "onchange src/less/style.less -- npm run less",
     "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\""
   },
 ```
@@ -156,8 +158,8 @@ This package allows us to run two scripts at the same time.
 
 ```
   "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css",
-      "watch-css": "node_modules/.bin/onchange src/less/style.less -- npm run less",
+    "less": "lessc src/less/style.less src/css/style.css",
+      "watch-css": "onchange src/less/style.less -- npm run less",
       "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\"",
       "watch":"parallelshell \"npm run watch-css\" \"npm run browser-sync\""
   },
@@ -180,11 +182,11 @@ We are going to put our build version in the folder named *dist*.
 Add the following *move* script 
 ```
 "scripts": {
-    "less": "node_modules/.bin/lessc src/less/style.less src/css/style.css",
-      "watch-css": "node_modules/.bin/onchange src/less/style.less -- npm run less",
-      "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\"",
-      "watch":"parallelshell \"npm run watch-css\" \"npm run browser-sync\"",
-      "move": "copy src\\index.html dist\\"
+    "less": "lessc src/less/style.less src/css/style.css",
+    "watch-css": "onchange src/less/style.less -- npm run less",
+    "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\"",
+    "watch":"parallelshell \"npm run watch-css\" \"npm run browser-sync\"",
+    "move": "copy src\\index.html dist\\"
   },
 ```
 Open the command prompt and test it works:
@@ -207,8 +209,8 @@ cleancss -o "src\css\style.min.css" "src\css\style.css"
 
 ```
 "scripts": {
-    "less": "lessc src\\less\\style.less src\\css\\style.css",
-    "watch-css":"onchange \"src\\less\\style.less\" -- npm run less",
+    "less": "lessc src/less/style.less src/css/style.css",
+    "watch-css": "onchange src/less/style.less -- npm run less",
     "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\"",
     "watch":"parallelshell \"npm run watch-css\" \"npm run browser-sync\"",
     "move": "copy src\\index.html dist\\",
@@ -222,12 +224,12 @@ cleancss -o "src\css\style.min.css" "src\css\style.css"
 
 ```
   "scripts": {
-    "less": "lessc src\\less\\style.less src\\css\\style.css",
-    "watch-css":"onchange \"src\\less\\style.less\" -- npm run less",
-    "browser-sync":"browser-sync start --server \"src\" --files \"src\\css\\style.css, src\\index.html\"",
+    "less": "lessc src/less/style.less src/css/style.css",
+    "watch-css": "onchange src/less/style.less -- npm run less",
+    "browser-sync":"browser-sync start --server \"src\" --files \"src/css/style.css, src/index.html\"",
     "watch":"parallelshell \"npm run watch-css\" \"npm run browser-sync\"",
     "move": "copy src\\index.html dist\\",
-    "minify": "cleancss -o \"dist\\css\\style.css\" \"src\\css\\style.css\"",
+    "minify": "cleancss -o \"dist/css/style.css\" \"src/css/style.css\"",
     "build":"npm run move && npm run minify"
   },
 
