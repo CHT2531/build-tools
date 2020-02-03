@@ -2,7 +2,7 @@
 
 Download the repository. From the *src* folder open the *index.html* page in a browser and check it works (it is a very simply HTML page with some attached CSS).
 
-> A note about 'slash' characters. When using the Command prompt or terminal, most operating systems use a forward slash between filenames e.g. *node_modules/.bin/lessc*. Windows use a backslash i.e. *node_modules\.bin\lessc*. The backslash character is also the escape character so if we have a file path as part of a string we write "node_modules\\.bin\\lessc". The following instructions are written for windows. If you are using a Mac, use forward slashes instead. 
+> A note about 'slash' characters. When using the Command prompt or terminal, most operating systems use a forward slash between filenames e.g. *node_modules/.bin/lessc*. Windows use a backslash i.e. *node_modules\.bin\lessc*. The backslash character is also the escape character so if we have a file path as part of a string we write "node_modules\\\.bin\\\lessc". The following instructions are written for windows. If you are using a Mac, use forward slashes instead. 
 
 > A note about local and global NPM packages. It is consider good practice to install packages locally. However, at the University, I have had some problems doing this. Therefore, the following instructions use global packages. 
 
